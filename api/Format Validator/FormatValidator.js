@@ -5,8 +5,8 @@ class FormatValidator {
     return this.isValidName.test(name);
   }
 
-  // Validates userID: 2-5 lowercase letters, dash, 12 alphanumeric characters
-  static isValidUserID = /^[a-z]{2,5}-[A-Za-z0-9]{12}$/;
+  // Validates userID: 2-5 lowercase letters, dash, 6 numbers
+  static isValidUserID = /^[a-z]{2,5}-[0-9]{6}$/;
   static validateUserID(userID) {
     return this.isValidUserID.test(userID);
   }
