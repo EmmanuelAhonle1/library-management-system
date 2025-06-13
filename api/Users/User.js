@@ -2,7 +2,6 @@ import { ValidationError } from "../Exceptions/Exception";
 import Transaction from "../Transactions/Transaction";
 import ItemClassesExports from "../Items/Item";
 import FormatValidator from "../Format Validator/FormatValidator";
-import DatabaseHandler from "../DatabaseHandler/DatabaseHandler";
 
 class User {
   userID;
@@ -39,6 +38,7 @@ class User {
     try {
       if (FormatValidator.validateName(firstName)) {
         //TODO: Replace with UserRepository code for setting user first name
+
         this.firstName = firstName;
       } else {
         throw new ValidationError(
@@ -177,99 +177,4 @@ class User {
   }
 }
 
-class Client extends User {
-  currentCheckouts;
-  currentHolds;
-  overdueTransactions;
-  transactionHistory;
-
-  constructor(
-    userID,
-    firstName,
-    lastName,
-    email,
-    passwordHash,
-    isActive,
-    createdDate,
-    lastLoginDate,
-    currentCheckouts,
-    currentHolds,
-    transactionHistory
-  ) {
-    super(
-      userID,
-      firstName,
-      lastName,
-      email,
-      passwordHash,
-      isActive,
-      createdDate,
-      lastLoginDate
-    );
-    this.currentCheckouts = currentCheckouts;
-    this.currentHolds = currentHolds;
-    this.transactionHistory = transactionHistory;
-  }
-
-  setOverdueTransactions() {
-    //TODO: Replace with UserRepository code for calculating and setting overdue transactions
-    this.currentCheckouts.forEach((element) => {
-      // TODO: complete set overdue transactions
-    });
-  }
-
-  //TODO: Replace with UserRepository code for handling checkouts
-  checkoutItem(item) {
-    //TODO: Implement checkout functionality with UserRepository
-  }
-
-  //TODO: Replace with UserRepository code for handling returns
-  returnItem(item) {
-    //TODO: Implement return functionality with UserRepository
-  }
-
-  //TODO: Replace with UserRepository code for placing holds
-  placeHold(item) {
-    //TODO: Implement hold placement functionality with UserRepository
-  }
-
-  //TODO: Replace with UserRepository code for fetching transaction history
-  getTransactionHistory() {
-    //TODO: Implement transaction history retrieval with UserRepository
-  }
-}
-
-class Librarian extends User {
-  #itemEditHistory;
-
-  constructor() {
-    //TODO: Replace with UserRepository code for creating librarian users
-  }
-
-  addItemToCatalog() {
-    //TODO: Replace with UserRepository code for adding items to catalog
-  }
-
-  //TODO: Replace with UserRepository code for removing items
-  removeItemFromCatalog(item) {
-    //TODO: Implement item removal functionality with UserRepository
-  }
-
-  //TODO: Replace with UserRepository code for modifying items
-  modifyItemDetails(item, details) {
-    //TODO: Implement item modification functionality with UserRepository
-  }
-
-  //TODO: Replace with UserRepository code for managing user accounts
-  manageUserAccounts(user, action) {
-    //TODO: Implement user account management functionality with UserRepository
-  }
-
-  //TODO: Replace with UserRepository code for viewing system logs
-  viewSystemLogs() {
-    //TODO: Implement system logs viewing functionality with UserRepository
-  }
-}
-
-const UserExports = { Client, Librarian, User };
-export default UserExports;
+export default User;
