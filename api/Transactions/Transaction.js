@@ -1,8 +1,7 @@
 //Client Transactions
-import CheckInTransaction from "./Client Transactions/CheckInTransaction";
 import CheckOutTransaction from "./Client Transactions/CheckOutTransaction";
 import HoldTransaction from "./Client Transactions/HoldTransaction";
-
+import ReturnTransaction from "./Client Transactions/ReturnTransaction";
 //Librarian Transactions
 import AddItemTransaction from "./Librarian Transactions/AddItemTransaction";
 import DeleteItemTransaction from "./Librarian Transactions/DeleteItemTransaction";
@@ -15,7 +14,6 @@ const CLIENT_TRANSACTION_PREFIXES = new Map([
   ["hld", "hold"],
   ["chl", "cancel_hold"],
   ["rnw", "renewal"],
-  ["exp", "hold_expired"],
 ]);
 
 // Librarian Transaction Prefixes
@@ -63,7 +61,7 @@ class Transaction {
 }
 
 ClientTransactions = {
-  CheckInTransaction,
+  ReturnTransaction,
   CheckOutTransaction,
   HoldTransaction,
 };
