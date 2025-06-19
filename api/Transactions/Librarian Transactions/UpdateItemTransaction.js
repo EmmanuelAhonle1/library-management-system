@@ -1,5 +1,5 @@
 import Transaction from "../Transaction";
 
-class UpdateItemTransaction {}
+class UpdateItemTransaction extends Transaction {}
 
 export default UpdateItemTransaction;

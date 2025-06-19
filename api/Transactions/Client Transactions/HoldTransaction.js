@@ -1,5 +1,5 @@
 import Transaction from "../Transaction";
 
-class HoldTransaction {}
+class HoldTransaction extends Transaction {}
 
 export default HoldTransaction;

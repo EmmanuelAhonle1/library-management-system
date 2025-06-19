@@ -1,5 +1,9 @@
 import Transaction from "../Transaction";
 
-class CheckOutTransaction {}
+class CheckOutTransaction extends Transaction {
+  constructor(transactionID, transactionDate, status, userID, userType) {
+    this.transactionPrefix = "";
+  }
+}
 
 export default CheckOutTransaction;
