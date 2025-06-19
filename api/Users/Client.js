@@ -35,30 +35,30 @@ class Client extends User {
   }
 
   setOverdueTransactions() {
-    //TODO: Replace with UserRepository code for calculating and setting overdue transactions
+    //TODO: Replace with ClientRepository code for calculating and setting overdue transactions
     this.currentCheckouts.forEach((element) => {
       // TODO: complete set overdue transactions
     });
   }
 
-  //TODO: Replace with UserRepository code for handling checkouts
+  //TODO: Replace with ClientRepository code for handling checkouts
   checkoutItem(item) {
-    //TODO: Implement checkout functionality with UserRepository
+    //TODO: Implement checkout functionality with ClientRepository
   }
 
-  //TODO: Replace with UserRepository code for handling returns
+  //TODO: Replace with ClientRepository code for handling returns
   returnItem(item) {
-    //TODO: Implement return functionality with UserRepository
+    //TODO: Implement return functionality with ClientRepository
   }
 
-  //TODO: Replace with UserRepository code for placing holds
+  //TODO: Replace with ClientRepository code for placing holds
   placeHold(item) {
-    //TODO: Implement hold placement functionality with UserRepository
+    //TODO: Implement hold placement functionality with ClientRepository
   }
 
-  //TODO: Replace with UserRepository code for fetching transaction history
+  //TODO: Replace with ClientRepository code for fetching transaction history
   getTransactionHistory() {
-    //TODO: Implement transaction history retrieval with UserRepository
+    //TODO: Implement transaction history retrieval with ClientRepository
   }
 }
 

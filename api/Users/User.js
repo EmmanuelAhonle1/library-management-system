@@ -37,7 +37,7 @@ class User {
   setFirstName(firstName) {
     try {
       if (FormatValidator.validateName(firstName)) {
-        //TODO: Replace with UserRepository code for setting user first name
+        //TODO: Replace with ClientRepository code for setting user first name
 
         this.firstName = firstName;
       } else {
@@ -53,7 +53,7 @@ class User {
   setLastName(lastName) {
     try {
       if (FormatValidator.validateName(lastName)) {
-        //TODO: Replace with UserRepository code for setting user last name
+        //TODO: Replace with ClientRepository code for setting user last name
         this.firstName = lastName;
       } else {
         throw new ValidationError(
@@ -99,7 +99,7 @@ class User {
     try {
       // Hash the password and store it
       this.#passwordHash = hashPassword(password);
-      //TODO: Replace with UserRepository code for storing the hashed password
+      //TODO: Replace with ClientRepository code for storing the hashed password
     } catch (error) {
       console.error(error);
     }
@@ -108,7 +108,7 @@ class User {
   setCreatedDate(createdDate) {
     try {
       if (FormatValidator.validateDatetime(createdDate)) {
-        //TODO: Replace with UserRepository code for setting created date
+        //TODO: Replace with ClientRepository code for setting created date
         this.#createdDate = createdDate;
       } else {
         throw new ValidationError(
@@ -123,7 +123,7 @@ class User {
   setLastLoginDate(lastLoginDate) {
     try {
       if (FormatValidator.validateDatetime(lastLoginDate)) {
-        //TODO: Replace with UserRepository code for updating last login date
+        //TODO: Replace with ClientRepository code for updating last login date
         this.#lastLoginDate = lastLoginDate;
       } else {
         throw new ValidationError(
@@ -138,7 +138,7 @@ class User {
   setUserID(userID) {
     try {
       if (FormatValidator.validateUserID(userID)) {
-        //TODO: Replace with UserRepository code for setting user ID
+        //TODO: Replace with ClientRepository code for setting user ID
         this.userID = userID;
       } else {
         throw new ValidationError(
@@ -153,7 +153,7 @@ class User {
   setActiveStatus(isActive) {
     try {
       if (FormatValidator.validateBoolean(isActive)) {
-        //TODO: Replace with UserRepository code for setting active status
+        //TODO: Replace with ClientRepository code for setting active status
         this.isActive = isActive;
       } else {
         throw new ValidationError(`Active status must be a boolean value`);
@@ -166,7 +166,7 @@ class User {
   setEmail(email) {
     try {
       if (FormatValidator.validateEmail(email)) {
-        //TODO: Replace with UserRepository code for setting email
+        //TODO: Replace with ClientRepository code for setting email
         this.email = email;
       } else {
         throw new ValidationError(`'${email}' is an invalid Email format`);
