@@ -1,5 +1,10 @@
 import Transaction from "../Transaction";
 
-class HoldTransaction extends Transaction {}
+class HoldTransaction extends Transaction {
+  static transactionPrefix = "hld";
+  constructor(userID, itemID) {
+    super(userID, itemID, this.transactionPrefix);
+  }
+}
 
 export default HoldTransaction;

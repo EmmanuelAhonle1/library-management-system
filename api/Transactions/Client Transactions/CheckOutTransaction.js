@@ -1,8 +1,9 @@
 import Transaction from "../Transaction";
 
 class CheckOutTransaction extends Transaction {
-  constructor(transactionID, transactionDate, status, userID, userType) {
-    this.transactionPrefix = "";
+  static transactionPrefix = "chk";
+  constructor(userID, itemID) {
+    super(userID, itemID, this.transactionPrefix);
   }
 }
 
