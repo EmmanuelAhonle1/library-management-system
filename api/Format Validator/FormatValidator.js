@@ -11,6 +11,11 @@ class FormatValidator {
     return this.isValidUserID.test(userID);
   }
 
+  // Validates transaction ID: 2-5 lowercase letters, dash, 12 alphanumeric characters
+  static isValidTransactionID = /^[a-z]{2,5}-[A-Za-z0-9]{12}$/;
+  static validateTransactionID(transactionID) {
+    return this.isValidTransactionID.test(transactionID);
+  }
   // Validates email: requires text@domain.tld format with no spaces
   static isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   static validateEmail(email) {
