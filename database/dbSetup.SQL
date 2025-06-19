@@ -391,9 +391,13 @@ SELECT @expired_count as 'Expired Holds Processed';
 
 -- Example: Insert a new checkout transaction
 INSERT INTO item_transactions (transaction_id, client_id, item_id, transaction_type)
-VALUES ('chk-ABC123DEF456', 'cli-123456', 'itm-789012', 'checkout');
+VALUES ('chk-abc123def456', 'cli-123456', 'itm-789012', 'checkout');
 
 -- Example: Insert a return transaction
 INSERT INTO item_transactions (transaction_id, client_id, item_id, transaction_type)
-VALUES ('ret-XYZ789GHI012', 'cli-123456', 'itm-789012', 'return');
+VALUES ('ret-xyz789ghi012', 'cli-123456', 'itm-789012', 'return');
+
+-- Example: Insert a hold transaction
+INSERT INTO item_transactions (transaction_id, client_id, item_id, transaction_type)
+VALUES ('hld-def456ghi789', 'cli-654321', 'itm-345678', 'hold');
 */
