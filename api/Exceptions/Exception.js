@@ -5,4 +5,11 @@ class ValidationError extends Error {
   }
 }
 
-export { ValidationError };
+class AbstractionError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "AbstractionError";
+  }
+}
+
+export { ValidationError, AbstractionError };
