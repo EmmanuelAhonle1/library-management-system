@@ -2,6 +2,8 @@
 import CheckOutTransaction from "./Client Transactions/CheckOutTransaction";
 import HoldTransaction from "./Client Transactions/HoldTransaction";
 import ReturnTransaction from "./Client Transactions/ReturnTransaction";
+import CancelHoldTransaction from "./Client Transactions/CancelHoldTransaction";
+import RenewalTransaction from "./Client Transactions/RenewalTransaction";
 //Librarian Transactions
 import AddItemTransaction from "./Librarian Transactions/AddItemTransaction";
 import DeleteItemTransaction from "./Librarian Transactions/DeleteItemTransaction";
@@ -64,6 +66,8 @@ ClientTransactions = {
   ReturnTransaction,
   CheckOutTransaction,
   HoldTransaction,
+  CancelHoldTransaction,
+  RenewalTransaction,
 };
 
 LibrarianTransactions = {
