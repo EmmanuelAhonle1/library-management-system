@@ -46,6 +46,15 @@ class Transaction {
     this.transactionID = this.generateTransactionID(this.transactionPrefix);
   }
 
+  /**
+   * Generates a unique transaction ID with the specified prefix
+   * @param {string} transactionPrefix - The 3-letter prefix for the transaction type (e.g., "chk", "ret", "hld", "add", "del")
+   * @returns {string} A unique transaction ID in format: "prefix-randomString" (e.g., "chk-abc123def456")
+   * @example
+   * generateTransactionID("chk") // Returns: "chk-x7k9m2n4p8q1"
+   * generateTransactionID("ret") // Returns: "ret-a1b2c3d4e5f6"
+   * generateTransactionID("add") // Returns: "add-z9y8x7w6v5u4"
+   */
   generateTransactionID(transactionPrefix) {
     // Generate 12 random alphanumeric characters (lowercase)
     const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -59,6 +68,46 @@ class Transaction {
 
     // Return format: prefix-randomString (e.g., "chk-abc123def456")
     return `${transactionPrefix}-${randomString}`;
+  }
+
+  /**
+   * Executes a transaction by inserting it into the item_transactions table
+   * @param {Transaction} transaction - The transaction object containing all transaction details
+   * @returns {Promise<Object>} Promise resolving to database execution result or error object
+   * @throws {Error} Database connection or query execution errors
+   * @example
+   * const transaction = new CheckOutTransaction("cli-100001", "book-200001");
+   * const result = await buildAndExecuteTransaction(transaction);
+   * // Returns: { insertId: 123, affectedRows: 1 } or { success: false, error: "..." }
+   */
+  static async buildAndExecuteTransaction(transaction) {
+    try {
+      let db = new DatabaseHandler(
+        process.env.DATABASE_HOST,
+        process.env.DATABASE_USER,
+        process.env.DATABASE_PASSWORD,
+        process.env.DATABASE_NAME,
+        process.env.DATABASE_PORT
+      );
+      await db.initConnection();
+      let query = `INSERT INTO item_transactions
+      (transaction_id, client_id, item_id, transaction_type)
+      VALUES (?, ?, ?, ?)`;
+
+      let params = [
+        transaction.transactionID,
+        transaction.userID,
+        transaction.itemID,
+        transaction.transactionType,
+      ];
+
+      const results = await db.executeQuery(query, params);
+      return results;
+    } catch (error) {
+      return { success: false, error: error.message };
+    } finally {
+      await db.closeConnection();
+    }
   }
 }
 

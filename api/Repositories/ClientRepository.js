@@ -1,9 +1,9 @@
 import Repository from "./Repository";
 import Client from "../Users/Client";
 import FormatValidator from "../Format Validator/FormatValidator";
-
-import { ClientTransactions } from "../Transactions/Transaction";
 import UserRepository from "./UserRepository";
+
+import Transaction, { ClientTransactions } from "../Transactions/Transaction";
 
 class ClientRepository extends UserRepository {
   constructor() {
@@ -87,15 +87,13 @@ class ClientRepository extends UserRepository {
       await this.db.closeConnection();
     }
   }
-
-  // Individual functions for each transaction type
   async checkoutItem(clientID, itemID) {
     const transaction = new ClientTransactions.CheckOutTransaction(
       clientID,
       itemID
     );
     // Add checkout-specific validation/logic here
-    return this.buildAndExecuteTransaction(transaction);
+    return Transaction.buildAndExecuteTransaction(transaction);
   }
 
   async returnItem(clientID, itemID) {
@@ -104,7 +102,7 @@ class ClientRepository extends UserRepository {
       itemID
     );
     // Add return-specific validation/logic here (e.g., calculate late fees)
-    return this.buildAndExecuteTransaction(transaction);
+    return Transaction.buildAndExecuteTransaction(transaction);
   }
 
   async holdItem(clientID, itemID) {
@@ -113,7 +111,7 @@ class ClientRepository extends UserRepository {
       itemID
     );
     // Add hold-specific validation/logic here (e.g., check if item is available)
-    return this.buildAndExecuteTransaction(transaction);
+    return Transaction.buildAndExecuteTransaction(transaction);
   }
   async cancelHold(clientID, itemID) {
     const transaction = new ClientTransactions.CancelHoldTransaction(
@@ -121,7 +119,7 @@ class ClientRepository extends UserRepository {
       itemID
     );
     // Add cancel hold-specific validation/logic here
-    return this.buildAndExecuteTransaction(transaction);
+    return Transaction.buildAndExecuteTransaction(transaction);
   }
 
   async renewItem(clientID, itemID) {
@@ -130,31 +128,7 @@ class ClientRepository extends UserRepository {
       clientID,
       itemID
     );
-    return this.buildAndExecuteTransaction(transaction);
-  }
-
-  // Generic helper method for executing transactions
-  async buildAndExecuteTransaction(transaction) {
-    try {
-      await this.db.initConnection();
-      let query = `INSERT INTO item_transactions
-      (transaction_id, client_id, item_id, transaction_type)
-      VALUES (?, ?, ?, ?)`;
-
-      let params = [
-        transaction.transactionID,
-        transaction.userID,
-        transaction.itemID,
-        transaction.transactionType,
-      ];
-
-      const results = await this.db.executeQuery(query, params);
-      return results;
-    } catch (error) {
-      return { success: false, error: error.message };
-    } finally {
-      await this.db.closeConnection();
-    }
+    return Transaction.buildAndExecuteTransaction(transaction);
   }
 }
 
