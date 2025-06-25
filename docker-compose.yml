@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  library-api:
+    build: ./api
+    ports:
+      - "${API_PORT}:3000"
+    environment:
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_PORT=${DATABASE_PORT}
+    depends_on:
+      - library-db
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+
+  library-db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DATABASE_PASSWORD}
+      - MYSQL_DATABASE=${DATABASE_NAME}
+    ports:
+      - "${DB_EXTERNAL_PORT}:${DATABASE_PORT}"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database:/docker-entrypoint-initdb.d
+
+  # frontend:
+  #   build: ./frontend  # If you have a frontend
+  #   ports:
+  #     - "8080:80"
+  #   depends_on:
+  #     - library-api
+
+volumes:
+  db_data:
