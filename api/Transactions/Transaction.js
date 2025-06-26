@@ -111,7 +111,7 @@ class Transaction {
   }
 }
 
-ClientTransactions = {
+const ClientTransactions = {
   ReturnTransaction,
   CheckOutTransaction,
   HoldTransaction,
@@ -119,7 +119,7 @@ ClientTransactions = {
   RenewalTransaction,
 };
 
-LibrarianTransactions = {
+const LibrarianTransactions = {
   AddItemTransaction,
   DeleteItemTransaction,
   UpdateItemTransaction,

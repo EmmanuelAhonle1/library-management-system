@@ -1,4 +1,4 @@
-import Transaction from "../Transaction";
+import Transaction from "../Transaction.js";
 
 class CheckOutTransaction extends Transaction {
   static transactionPrefix = "chk";

@@ -1,5 +1,3 @@
-import User from "./Users/User";
-
 const express = require("express");
 
 const app = express();
