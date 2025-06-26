@@ -1,5 +1,5 @@
 import Repository from "./Repository.js";
-import { AbstractionError } from "../Exceptions/Exception.js";
+import { AbstractionError } from "../Errors/GeneralError.js";
 
 class UserRepository extends Repository {
   constructor() {
@@ -62,7 +62,7 @@ class UserRepository extends Repository {
 
       await this.db.initConnection();
 
-      let [requirements, values] = this.#updateBuilder(updateData);
+      let [requirements, values] = this.updateBuilder(updateData);
 
       let query = `UPDATE ${userTableName}
 
@@ -113,7 +113,7 @@ class UserRepository extends Repository {
    * @param {Map} updateData - Map containing field names as keys and values to update
    * @returns {Array} Array containing [requirements string, values array] for SQL query
    */
-  #updateBuilder(updateData) {
+  updateBuilder(updateData) {
     const [keys, values] = [
       Array.from(updateData.keys()),
       Array.from(updateData.values()),

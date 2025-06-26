@@ -3,8 +3,6 @@ import Client from "../Users/Client";
 import FormatValidator from "../Format Validator/FormatValidator";
 import UserRepository from "./UserRepository";
 
-import Transaction, { ClientTransactions } from "../Transactions/Transaction";
-
 class ClientRepository extends UserRepository {
   constructor() {
     super();
@@ -88,47 +86,101 @@ class ClientRepository extends UserRepository {
     }
   }
   async checkoutItem(clientID, itemID) {
-    const transaction = new ClientTransactions.CheckOutTransaction(
+    return this.executeClientTransaction(
       clientID,
-      itemID
+      itemID,
+      "checkout",
+      "chk",
+      "Item checked out successfully"
     );
-    // Add checkout-specific validation/logic here
-    return Transaction.buildAndExecuteTransaction(transaction);
   }
 
   async returnItem(clientID, itemID) {
-    const transaction = new ClientTransactions.ReturnTransaction(
+    return this.executeClientTransaction(
       clientID,
-      itemID
+      itemID,
+      "return",
+      "ret",
+      "Item returned successfully"
     );
-    // Add return-specific validation/logic here (e.g., calculate late fees)
-    return Transaction.buildAndExecuteTransaction(transaction);
   }
 
   async holdItem(clientID, itemID) {
-    const transaction = new ClientTransactions.HoldTransaction(
+    return this.executeClientTransaction(
       clientID,
-      itemID
+      itemID,
+      "hold",
+      "hld",
+      "Item placed on hold successfully"
     );
-    // Add hold-specific validation/logic here (e.g., check if item is available)
-    return Transaction.buildAndExecuteTransaction(transaction);
   }
+
   async cancelHold(clientID, itemID) {
-    const transaction = new ClientTransactions.CancelHoldTransaction(
+    return this.executeClientTransaction(
       clientID,
-      itemID
+      itemID,
+      "cancel_hold",
+      "chl",
+      "Hold cancelled successfully"
     );
-    // Add cancel hold-specific validation/logic here
-    return Transaction.buildAndExecuteTransaction(transaction);
   }
 
   async renewItem(clientID, itemID) {
-    // TODO: Create RenewalTransaction class
-    const transaction = new ClientTransactions.RenewalTransaction(
+    return this.executeClientTransaction(
       clientID,
-      itemID
+      itemID,
+      "renewal",
+      "rnw",
+      "Item renewed successfully"
     );
-    return Transaction.buildAndExecuteTransaction(transaction);
+  }
+
+  // Helper method to execute client transactions
+  async executeClientTransaction(
+    clientID,
+    itemID,
+    transactionType,
+    prefix,
+    successMessage
+  ) {
+    try {
+      await this.db.initConnection();
+
+      const transactionID = this.generateTransactionID(prefix);
+
+      const query = `
+        INSERT INTO item_transactions (transaction_id, client_id, item_id, transaction_type)
+        VALUES (?, ?, ?, ?)
+      `;
+
+      const params = [transactionID, clientID, itemID, transactionType];
+      const result = await this.db.executeQuery(query, params);
+
+      return {
+        success: true,
+        transactionId: transactionID,
+        message: successMessage,
+        databaseResult: result,
+      };
+    } catch (error) {
+      return { success: false, error: error.message };
+    } finally {
+      await this.db.closeConnection();
+    }
+  }
+
+  // Helper method to generate transaction IDs
+  generateTransactionID(prefix) {
+    const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let randomString = "";
+
+    for (let i = 0; i < 12; i++) {
+      randomString += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
+    }
+
+    return `${prefix}-${randomString}`;
   }
 }
 

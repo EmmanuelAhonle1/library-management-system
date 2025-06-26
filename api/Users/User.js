@@ -1,4 +1,4 @@
-import { ValidationError } from "../Exceptions/Exception";
+import { ValidationError } from "../Errors/GeneralError";
 import Transaction from "../Transactions/Transaction";
 import ItemClassesExports from "../Items/Item";
 import FormatValidator from "../Format Validator/FormatValidator";
