@@ -1,11 +1,5 @@
-import { query } from "express";
-import Transaction, {
-  LibrarianTransactions,
-} from "../Transactions/Transaction";
-
 import UserRepository from "./UserRepository";
 import LibrarianError from "../Errors/LibrarianError.js";
-import User from "../Users/User.js";
 
 class LibrarianRepository extends UserRepository {
   constructor() {
@@ -212,7 +206,7 @@ class LibrarianRepository extends UserRepository {
         await this.db.executeQuery(deleteTransactionsQuery, [itemID]);
 
         // Step 3: Manual audit log insertion (since no DELETE trigger exists)
-        const auditId = this.generateAuditId();
+        const auditId = UserRepository.generateTransactionId("aud");
         const auditQuery = `
           INSERT INTO item_audit_logs (audit_id, item_id, librarian_id, transaction_type, description)
           VALUES (?, ?, ?, 'item_deleted', ?)
@@ -254,16 +248,6 @@ class LibrarianRepository extends UserRepository {
     } finally {
       await this.db.closeConnection();
     }
-  }
-
-  // Helper method to generate audit ID
-  generateAuditId() {
-    const prefix = "aud";
-    const randomString = Math.random()
-      .toString(36)
-      .substring(2, 14)
-      .padEnd(12, "0");
-    return `${prefix}-${randomString}`;
   }
 }
 

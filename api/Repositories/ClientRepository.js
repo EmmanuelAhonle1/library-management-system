@@ -146,7 +146,7 @@ class ClientRepository extends UserRepository {
     try {
       await this.db.initConnection();
 
-      const transactionID = this.generateTransactionID(prefix);
+      const transactionID = UserRepository.generateTransactionId(prefix);
 
       const query = `
         INSERT INTO item_transactions (transaction_id, client_id, item_id, transaction_type)
@@ -167,20 +167,6 @@ class ClientRepository extends UserRepository {
     } finally {
       await this.db.closeConnection();
     }
-  }
-
-  // Helper method to generate transaction IDs
-  generateTransactionID(prefix) {
-    const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
-    let randomString = "";
-
-    for (let i = 0; i < 12; i++) {
-      randomString += characters.charAt(
-        Math.floor(Math.random() * characters.length)
-      );
-    }
-
-    return `${prefix}-${randomString}`;
   }
 }
 

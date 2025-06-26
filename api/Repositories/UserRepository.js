@@ -10,6 +10,39 @@ class UserRepository extends Repository {
         "Abstract class UserRepository cannot be instantiated directly"
       );
     }
+  }
+
+  /**
+   * Generates a unique transaction/audit ID with mixed-case alphanumeric characters
+   * @param {string} prefix - The prefix for the ID (e.g., "chk", "ret", "aud")
+   * @returns {string} A unique ID in format: "prefix-randomString" (e.g., "chk-AbC123DeF456")
+   */
+  static generateTransactionId(prefix) {
+    const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
+    let randomString = "";
+
+    for (let i = 0; i < 12; i++) {
+      randomString += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
+    }
+
+    return `${prefix}-${randomString}`;
+  }
+
+  /**
+   * Generates a unique user/item ID with numeric suffix
+   * @param {string} prefix - The prefix for the ID (e.g., "cli", "lib", "itm")
+   * @returns {string} A unique ID in format: "prefix-numbers" (e.g., "cli-123456")
+   */
+  static generateUserId(prefix) {
+    let randomNumbers = "";
+
+    for (let i = 0; i < 6; i++) {
+      randomNumbers += Math.floor(Math.random() * 10).toString();
+    }
+
+    return `${prefix}-${randomNumbers}`;
   } // User-related data operations
 
   /**
