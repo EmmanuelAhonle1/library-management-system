@@ -249,6 +249,82 @@ class LibrarianRepository extends UserRepository {
       await this.db.closeConnection();
     }
   }
+
+  // User management methods
+
+  /**
+   * Creates a new librarian user
+   * @param {Object} userData - Librarian data object containing user information
+   * @returns {Promise<Object>} Promise resolving to creation result
+   */
+  async createUser(userData) {
+    try {
+      // Validate required fields
+      if (
+        !userData.first_name ||
+        !userData.last_name ||
+        !userData.email ||
+        !userData.password
+      ) {
+        return {
+          success: false,
+          error:
+            "Missing required fields: first_name, last_name, email, and password are required",
+        };
+      }
+
+      await this.db.initConnection();
+
+      // Generate librarian ID
+      const librarianId = UserRepository.generateUserId("libra");
+
+      // Set defaults for optional fields
+      const librarianDefaults = {
+        is_active: true,
+        ...userData,
+        librarian_id: librarianId,
+      };
+
+      const query = `
+        INSERT INTO librarians (
+          librarian_id, first_name, last_name, email, password, is_active
+        ) VALUES (?, ?, ?, ?, ?, ?)
+      `;
+
+      const params = [
+        librarianDefaults.librarian_id,
+        librarianDefaults.first_name,
+        librarianDefaults.last_name,
+        librarianDefaults.email,
+        librarianDefaults.password, // Should be hashed in application layer
+        librarianDefaults.is_active,
+      ];
+
+      const result = await this.db.executeQuery(query, params);
+
+      if (result.affectedRows === 0) {
+        return { success: false, error: "Failed to create librarian" };
+      }
+
+      return {
+        success: true,
+        message: "Librarian created successfully",
+        librarianId: librarianDefaults.librarian_id,
+        insertId: result.insertId,
+      };
+    } catch (error) {
+      // Handle duplicate key errors specifically
+      if (error.code === "ER_DUP_ENTRY") {
+        return {
+          success: false,
+          error: "Librarian with this email already exists",
+        };
+      }
+      return { success: false, error: error.message };
+    } finally {
+      await this.db.closeConnection();
+    }
+  }
 }
 
 export default LibrarianRepository;

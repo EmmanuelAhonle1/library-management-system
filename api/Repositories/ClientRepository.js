@@ -168,6 +168,82 @@ class ClientRepository extends UserRepository {
       await this.db.closeConnection();
     }
   }
+
+  // User management methods
+
+  /**
+   * Creates a new client user
+   * @param {Object} userData - Client data object containing user information
+   * @returns {Promise<Object>} Promise resolving to creation result
+   */
+  async createUser(userData) {
+    try {
+      // Validate required fields
+      if (
+        !userData.first_name ||
+        !userData.last_name ||
+        !userData.email ||
+        !userData.password
+      ) {
+        return {
+          success: false,
+          error:
+            "Missing required fields: first_name, last_name, email, and password are required",
+        };
+      }
+
+      await this.db.initConnection();
+
+      // Generate client ID
+      const clientId = UserRepository.generateUserId("cli");
+
+      // Set defaults for optional fields
+      const clientDefaults = {
+        is_active: true,
+        ...userData,
+        client_id: clientId,
+      };
+
+      const query = `
+        INSERT INTO clients (
+          client_id, first_name, last_name, email, password, is_active
+        ) VALUES (?, ?, ?, ?, ?, ?)
+      `;
+
+      const params = [
+        clientDefaults.client_id,
+        clientDefaults.first_name,
+        clientDefaults.last_name,
+        clientDefaults.email,
+        clientDefaults.password, // Should be hashed in application layer
+        clientDefaults.is_active,
+      ];
+
+      const result = await this.db.executeQuery(query, params);
+
+      if (result.affectedRows === 0) {
+        return { success: false, error: "Failed to create client" };
+      }
+
+      return {
+        success: true,
+        message: "Client created successfully",
+        clientId: clientDefaults.client_id,
+        insertId: result.insertId,
+      };
+    } catch (error) {
+      // Handle duplicate key errors specifically
+      if (error.code === "ER_DUP_ENTRY") {
+        return {
+          success: false,
+          error: "Client with this email already exists",
+        };
+      }
+      return { success: false, error: error.message };
+    } finally {
+      await this.db.closeConnection();
+    }
+  }
 }
 
 export default ClientRepository;
