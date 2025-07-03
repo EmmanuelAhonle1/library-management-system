@@ -1,6 +1,6 @@
-import { ValidationError } from "../Errors/GeneralError";
-import ItemClassesExports from "../Items/Item";
-import FormatValidator from "../Format Validator/FormatValidator";
+import { ValidationError } from "../Errors/GeneralError.js";
+import ItemClassesExports from "../Items/Item.js";
+import FormatValidator from "../Format Validator/FormatValidator.js";
 
 class User {
   userID;
