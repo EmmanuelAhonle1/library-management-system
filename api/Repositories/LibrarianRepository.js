@@ -1,4 +1,4 @@
-import UserRepository from "./UserRepository";
+import UserRepository from "./UserRepository.js";
 import LibrarianError from "../Errors/LibrarianError.js";
 
 class LibrarianRepository extends UserRepository {

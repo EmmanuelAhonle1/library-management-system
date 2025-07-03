@@ -1,4 +1,4 @@
-import DatabaseHandler from "../DatabaseHandler/DatabaseHandler";
+import DatabaseHandler from "../DatabaseHandler/DatabaseHandler.js";
 
 DatabaseHandler;
 

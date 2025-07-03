@@ -1,11 +1,11 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "server/app.js",
   "type": "module",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js",
+    "start": "nodemon server/app.js",
+    "dev": "nodemon server/app.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
     "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage"
@@ -15,6 +15,7 @@
   "description": "",
   "dependencies": {
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.6.0"
   },
   "devDependencies": {

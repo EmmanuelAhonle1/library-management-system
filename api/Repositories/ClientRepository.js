@@ -1,7 +1,6 @@
-import Repository from "./Repository";
-import Client from "../Users/Client";
-import FormatValidator from "../Format Validator/FormatValidator";
-import UserRepository from "./UserRepository";
+import Client from "../Users/Client.js";
+import FormatValidator from "../Format Validator/FormatValidator.js";
+import UserRepository from "./UserRepository.js";
 
 class ClientRepository extends UserRepository {
   constructor() {
