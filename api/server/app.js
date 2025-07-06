@@ -1,11 +1,14 @@
 import express from "express";
 import routes from "./routes/index.js";
 import { errorHandler } from "./middleware/errorHandler.js";
+import dotenv from "dotenv";
 
 const app = express();
 app.use(express.json());
 
-const PORT = process.env.PORT || 3000;
+dotenv.config();
+
+const PORT = process.env.API_PORT || 3001;
 
 // Health check endpoint - returns the server status
 app.get("/", (req, res) => {

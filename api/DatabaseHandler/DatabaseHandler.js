@@ -1,3 +1,5 @@
+import mysql from "mysql2";
+
 /**
  * Database Handler Class for MySQL
  * Manages database connections and query execution for MySQL databases using Node.js mysql package
@@ -20,7 +22,7 @@ class DatabaseHandler {
    * @param {string} database - MySQL database name
    * @param {number} port - MySQL port (default: 3306)
    */
-  constructor(host, user, password, database, port = 3306) {
+  constructor(host, user, password, database, port) {
     this.#host = host;
     this.#user = user;
     this.#password = password;
@@ -37,7 +39,6 @@ class DatabaseHandler {
   async initConnection() {
     try {
       // Import the mysql package
-      const mysql = require("mysql");
 
       // Create a connection pool
       this.#pool = mysql.createPool({
