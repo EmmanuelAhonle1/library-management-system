@@ -1,5 +1,7 @@
 import DatabaseHandler from "../DatabaseHandler/DatabaseHandler.js";
+import dotenv from "dotenv";
 
+dotenv.config();
 DatabaseHandler;
 
 class Repository {

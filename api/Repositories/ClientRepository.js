@@ -1,7 +1,6 @@
 import Client from "../Users/Client.js";
 import FormatValidator from "../Format Validator/FormatValidator.js";
 import UserRepository from "./UserRepository.js";
-
 class ClientRepository extends UserRepository {
   constructor() {
     super();
@@ -178,6 +177,7 @@ class ClientRepository extends UserRepository {
   async createUser(userData) {
     try {
       // Validate required fields
+      console.log(process.env.DATABASE_HOST);
       if (
         !userData.first_name ||
         !userData.last_name ||
