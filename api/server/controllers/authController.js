@@ -1,6 +1,12 @@
 import ClientRepository from "../../Repositories/ClientRepository.js";
 import LibrarianRepository from "../../Repositories/LibrarianRepository.js";
-
+import { validateUser } from "../middleware/validation.js";
+import {
+  authenticateUser,
+  hashPassword,
+  generateToken,
+} from "../middleware/auth.js";
+import bcrypt from "bcryptjs/dist/bcrypt.js";
 const clientRepo = new ClientRepository();
 const librarianRepo = new LibrarianRepository();
 
@@ -9,6 +15,17 @@ export const authController = {
     try {
       const { userType } = req.params;
       const userData = req.body;
+
+      const { isValid, errors } = validateUser(userData);
+      if (!isValid) {
+        return res
+          .status(400)
+          .json({ error: "Invalid user data", details: errors });
+      }
+
+      if (userData.password) {
+        userData.password = await hashPassword(userData.password);
+      }
 
       let repository;
       switch (userType) {
@@ -25,9 +42,19 @@ export const authController = {
       }
 
       const result = await repository.createUser(userData);
+
+      if (result.error) {
+        res.status(400).json({ message: result.error, data: result });
+        return;
+      }
+
+      // Generate JWT token for the newly created user
+      const token = generateToken(result, userType);
+
       res.status(201).json({
         message: `User of type ${userType} registered successfully!`,
         data: result,
+        token: token,
       });
     } catch (error) {
       console.error("Sign-up error:", error);
@@ -40,8 +67,9 @@ export const authController = {
       const { userType } = req.params;
       const credentials = req.body;
 
-      const repository = userType === "client" ? clientRepo : librarianRepo;
-      const result = await repository.authenticateUser(credentials);
+      //authenticateUser(req, res, () => {});
+
+      const result = await authenticateUser(req, res);
 
       if (result.success) {
         res.status(200).json({

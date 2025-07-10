@@ -35,7 +35,7 @@ class User {
 
   setFirstName(firstName) {
     try {
-      if (FormatValidator.validateName(firstName)) {
+      if (FormatValidator.isNameValid(firstName)) {
         //TODO: Replace with ClientRepository code for setting user first name
 
         this.firstName = firstName;
@@ -51,7 +51,7 @@ class User {
 
   setLastName(lastName) {
     try {
-      if (FormatValidator.validateName(lastName)) {
+      if (FormatValidator.isNameValid(lastName)) {
         //TODO: Replace with ClientRepository code for setting user last name
         this.firstName = lastName;
       } else {

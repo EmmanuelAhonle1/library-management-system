@@ -237,6 +237,11 @@ class ClientRepository extends UserRepository {
           success: false,
           error: "Client with this email already exists",
         };
+      } else {
+        return {
+          success: false,
+          error: "Server failed to sign up client",
+        };
       }
       return { success: false, error: error.message };
     } finally {
