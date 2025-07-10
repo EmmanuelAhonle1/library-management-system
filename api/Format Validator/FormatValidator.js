@@ -1,34 +1,34 @@
 class FormatValidator {
   // Validates name: letters, hyphens and underscores only, min 2 characters
-  static isValidName = /^[a-zA-Z_-]{2,}$/;
-  static validateName(name) {
-    return this.isValidName.test(name);
+  static name_format = /^[a-zA-Z_-]{2,}$/;
+  static isValidName(name) {
+    return this.name_format.test(name);
   }
 
   // Validates userID: 2-5 lowercase letters, dash, 6 numbers
-  static isValidUserID = /^[a-z]{2,5}-[0-9]{6}$/;
-  static validateUserID(userID) {
-    return this.isValidUserID.test(userID);
+  static userID_format = /^[a-z]{2,5}-[0-9]{6}$/;
+  static isValidUserID(userID) {
+    return this.userID_format.test(userID);
   }
 
   // Validates transaction ID: 2-5 lowercase letters, dash, 12 alphanumeric characters
-  static isValidTransactionID = /^[a-z]{2,5}-[A-Za-z0-9]{12}$/;
-  static validateTransactionID(transactionID) {
-    return this.isValidTransactionID.test(transactionID);
+  static transactionID_format = /^[a-z]{2,5}-[A-Za-z0-9]{12}$/;
+  static isValidTransactionID(transactionID) {
+    return this.transactionID_format.test(transactionID);
   }
   // Validates email: requires text@domain.tld format with no spaces
-  static isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  static validateEmail(email) {
-    return this.isValidEmail.test(email);
+  static email_format = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  static isValidEmail(email) {
+    return this.email_format.test(email);
   }
 
   // Validates datetime format: YYYY-MM-DD hh:mm:ss
-  static isValidDatetimeFormat = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
-  static validateDatetime(datetime) {
-    return this.isValidDatetimeFormat.test(datetime);
+  static datetime_format = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+  static isValidDatetime(datetime) {
+    return this.datetime_format.test(datetime);
   }
 
-  static validateBoolean(value) {
+  static isValidBoolean(value) {
     return typeof value === "boolean";
   }
 }
