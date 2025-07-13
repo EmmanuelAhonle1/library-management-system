@@ -2,11 +2,31 @@ import express from "express";
 import routes from "./routes/index.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+import path from "path";
+import cors from "cors";
+
+// Get the directory name of the current module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
+const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS
+  ? process.env.CORS_ALLOWED_ORIGINS.split(",")
+  : ["http://localhost:5173"];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 app.use(express.json());
 
-dotenv.config();
+// Configure dotenv with absolute path to ensure it works regardless of where the app is started from
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const PORT = process.env.API_PORT || 3001;
 

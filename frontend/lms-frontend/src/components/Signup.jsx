@@ -3,6 +3,11 @@ import { useNavigate } from "react-router-dom";
 import FormatValidator from "../utils/FormatValidator";
 import "./Signup.css";
 
+// API configuration using Vite environment variables
+const API_CONFIG = {
+  baseUrl: import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api",
+};
+
 const Signup = ({ userType }) => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -80,17 +85,50 @@ const Signup = ({ userType }) => {
       setErrors(formErrors);
       return;
     }
-
-    // TODO: Replace with actual API call
-    console.log(`${userType} signup attempt:`, {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
+    // Dummy success - redirect to verification success page
+    //navigate("/signup-success");
+    const loginData = {
+      first_name: formData.firstName,
+      last_name: formData.lastName,
       email: formData.email,
       password: formData.password,
-    });
+    };
 
-    // Dummy success - redirect to verification success page
-    navigate("/signup-success");
+    console.log(`${userType} signup attempt:`, loginData);
+
+    const signUpRequest = new Request(
+      `${API_CONFIG.baseUrl}/auth/${userType.toLowerCase()}/sign-up`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginData),
+      }
+    );
+    fetch(signUpRequest)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Sign-up failed");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Sign-up successful:", data);
+
+        // Store the token in localStorage for authentication
+        if (data.token) {
+          localStorage.setItem("authToken", data.token);
+          localStorage.setItem("userType", userType.toLowerCase());
+          localStorage.setItem("userData", JSON.stringify(data.data));
+        }
+
+        navigate(`/signup-success-${userType.toLowerCase()}`);
+      })
+      .catch((error) => {
+        console.error("Error during sign-up:", error);
+        setErrors({ general: "Sign-up failed. Please try again." });
+      });
   };
 
   const handleLoginRedirect = () => {

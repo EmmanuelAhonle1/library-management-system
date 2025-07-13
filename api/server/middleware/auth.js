@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs/dist/bcrypt.js";
-
 /**
  * Secret key used for signing and verifying JWT tokens
  * In production, this should be set as an environment variable
