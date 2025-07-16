@@ -235,12 +235,19 @@ class ClientRepository extends UserRepository {
       if (error.code === "ER_DUP_ENTRY") {
         return {
           success: false,
-          error: "Client with this email already exists",
+          error: {
+            message: "Client with this email already exists",
+            code: "ER_DUP_ENTRY",
+          },
         };
       } else {
         return {
           success: false,
-          error: "Server failed to sign up client",
+          error: {
+            message: "An error occurred while creating the client",
+            details: error.message,
+            code: "ER_DUP_ENTRY",
+          },
         };
       }
       return { success: false, error: error.message };

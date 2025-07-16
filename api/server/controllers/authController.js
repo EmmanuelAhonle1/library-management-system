@@ -6,9 +6,16 @@ import {
   hashPassword,
   generateToken,
 } from "../middleware/auth.js";
-import bcrypt from "bcryptjs/dist/bcrypt.js";
+
+/* Repository Instances */
 const clientRepo = new ClientRepository();
 const librarianRepo = new LibrarianRepository();
+
+/* User Type Repository Map */
+const userTypeRepo = new Map([
+  ["client", clientRepo],
+  ["librarian", librarianRepo],
+]);
 
 export const authController = {
   async signUp(req, res) {
@@ -28,24 +35,26 @@ export const authController = {
       }
 
       let repository;
-      switch (userType) {
-        case "client":
-          repository = clientRepo;
-          break;
-        case "librarian":
-          repository = librarianRepo;
-          break;
-        default:
-          return res
-            .status(400)
-            .json({ error: `User type '${userType}' is not allowed` });
+      if (userTypeRepo.has(userType)) {
+        repository = userTypeRepo.get(userType);
+      } else {
+        return res
+          .status(400)
+          .json({ error: `User type '${userType}' is not allowed` });
       }
 
       const result = await repository.createUser(userData);
 
       if (result.error) {
-        res.status(400).json({ message: result.error, data: result });
-        return;
+        console.log(result.error);
+        if (result.error.code === "ER_DUP_ENTRY") {
+          res.status(409).json({ data: result });
+
+          return;
+        } else {
+          res.status(400).json({ data: result });
+          return;
+        }
       }
 
       // Generate JWT token for the newly created user
