@@ -17,6 +17,7 @@ const Signup = ({ userType }) => {
     confirmPassword: "",
   });
   const [errors, setErrors] = useState({});
+  const [signUpSuccess, setSignUpSuccess] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -85,8 +86,6 @@ const Signup = ({ userType }) => {
       setErrors(formErrors);
       return;
     }
-    // Dummy success - redirect to verification success page
-    //navigate("/signup-success");
     const loginData = {
       first_name: formData.firstName,
       last_name: formData.lastName,
@@ -109,7 +108,14 @@ const Signup = ({ userType }) => {
     fetch(signUpRequest)
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Sign-up failed");
+          switch (response.status) {
+            case 400:
+              throw new Error("Invalid user data");
+            case 409:
+              throw new Error("Email already exists");
+            default:
+              throw new Error("Unexpected error: " + response.statusText);
+          }
         }
         return response.json();
       })
@@ -122,11 +128,14 @@ const Signup = ({ userType }) => {
           localStorage.setItem("userType", userType.toLowerCase());
           localStorage.setItem("userData", JSON.stringify(data.data));
         }
-
-        navigate(`/signup-success-${userType.toLowerCase()}`);
+        setSignUpSuccess(true);
+        setErrors({}); // Clear any previous errors
+        setTimeout(() => {
+          navigate(`/dashboard`);
+        }, 2000); // Simulate a delay before redirecting
       })
       .catch((error) => {
-        console.error("Error during sign-up:", error);
+        console.error(error);
         setErrors({ general: "Sign-up failed. Please try again." });
       });
   };
@@ -139,6 +148,7 @@ const Signup = ({ userType }) => {
     <div className="signup-container">
       <div className="signup-card">
         <h2>Sign Up as {userType}</h2>
+
         <form onSubmit={handleSubmit} className="signup-form">
           <div className="form-row">
             <div className="form-group">
@@ -156,7 +166,6 @@ const Signup = ({ userType }) => {
                 <span className="error-message">{errors.firstName}</span>
               )}
             </div>
-
             <div className="form-group">
               <label htmlFor="lastName">Last Name:</label>
               <input
@@ -221,10 +230,16 @@ const Signup = ({ userType }) => {
               <span className="error-message">{errors.confirmPassword}</span>
             )}
           </div>
-
-          <button type="submit" className="signup-btn">
-            Sign Up as {userType}
-          </button>
+          {signUpSuccess ? (
+            <div className="signup-success-container">
+              <div className="loader"></div>
+              <div>Success! Navigating to the {userType} dashboard...</div>
+            </div>
+          ) : (
+            <button type="submit" className="signup-btn">
+              Sign Up as {userType}
+            </button>
+          )}
         </form>
 
         <div className="login-link">

@@ -31,16 +31,22 @@
 
 .form-row {
   display: flex;
-  gap: 1rem;
+  gap: 0.2rem;
+  max-width: 100%;
 }
 
 .form-row .form-group {
   flex: 1;
 }
 
+.form-row .form-group input {
+  max-width: 95%; /* Slightly smaller than the 1rem default */
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
+  margin-bottom: 0.5rem; /* Add consistent bottom margin */
 }
 
 .form-group label {
@@ -126,4 +132,29 @@
   .signup-card {
     padding: 1.5rem;
   }
+}
+
+.loader {
+  border: 3px solid #f3f3f3; /* Light grey */
+  border-top: 3px solid #38ef7d; /* Blue */
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 0.5s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.signup-success-container {
+  display: flex; /* Makes the container a flex container */
+  justify-content: space-between; /* Distributes items with space between them */
+  align-items: center; /* Vertically centers items */
+  padding: 0.5rem 2.5rem;
 }
