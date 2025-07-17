@@ -82,6 +82,18 @@ class UserRepository extends Repository {
     }
   }
 
+  async findUserByEmail(email, userType) {
+    try {
+      await this.db.initConnection();
+      let query = `SELECT * FROM ${userType}s WHERE email = ?`;
+      let params = [email];
+      const result = await this.db.executeQuery(query, params);
+      return result;
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  }
+
   /**
    * Updates a user's information in the appropriate table
    * @param {string} userID - User ID with format prefix-number (e.g., "cli-123456", "libra-789012")
