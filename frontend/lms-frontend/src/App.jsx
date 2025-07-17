@@ -1,15 +1,15 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./App.css";
 
 // Import pages
-import Home from './pages/Home';
-import ClientLogin from './pages/ClientLogin';
-import LibrarianLogin from './pages/LibrarianLogin';
-import ClientSignup from './pages/ClientSignup';
-import LibrarianSignup from './pages/LibrarianSignup';
-import Dashboard from './pages/Dashboard';
-import SignupSuccess from './pages/SignupSuccess';
+import Home from "./pages/Home";
+import ClientLogin from "./pages/ClientLogin";
+import LibrarianLogin from "./pages/LibrarianLogin";
+import ClientSignup from "./pages/ClientSignup";
+import LibrarianSignup from "./pages/LibrarianSignup";
+import Dashboard from "./pages/Dashboard";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
@@ -22,11 +22,11 @@ function App() {
           <Route path="/signup-client" element={<ClientSignup />} />
           <Route path="/signup-librarian" element={<LibrarianSignup />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/signup-success" element={<SignupSuccess />} />
+          <Route path="/settings" element={<Settings />} />
         </Routes>
       </div>
     </Router>
   );
 }
 
-export default App
+export default App;

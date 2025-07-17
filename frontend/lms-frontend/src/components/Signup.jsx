@@ -126,7 +126,7 @@ const Signup = ({ userType }) => {
         if (data.token) {
           localStorage.setItem("authToken", data.token);
           localStorage.setItem("userType", userType.toLowerCase());
-          localStorage.setItem("userData", JSON.stringify(data.data));
+          localStorage.setItem("userId", data.data.clientId);
         }
         setSignUpSuccess(true);
         setErrors({}); // Clear any previous errors
