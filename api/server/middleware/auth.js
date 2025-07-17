@@ -77,12 +77,34 @@ export const hashPassword = async (password) => {
  * @description Creates a signed JWT token containing user information and type.
  *              The token expires in 24 hours by default.
  */
+/**
+ * Verifies a JWT token and returns the decoded user data
+ *
+ * @param {string} token - The JWT token to verify
+ * @returns {Object|null} The decoded token payload or null if invalid
+ * @description Verifies a JWT token and returns the decoded data without sending a response.
+ *              Used for token verification rather than middleware protection.
+ */
+export const verifyToken = (token) => {
+  try {
+    if (!token) return null;
+
+    // Remove 'Bearer ' if present
+    const tokenString = token.startsWith("Bearer ")
+      ? token.split(" ")[1]
+      : token;
+    return jwt.verify(tokenString, JWT_SECRET);
+  } catch (error) {
+    return null;
+  }
+};
+
 export const generateToken = (user, userType) => {
   const payload = {
     id: user.id,
     email: user.email,
-    firstName: user.firstName,
-    lastName: user.lastName,
+    firstName: user.first_name,
+    lastName: user.last_name,
     userType: userType,
   };
 

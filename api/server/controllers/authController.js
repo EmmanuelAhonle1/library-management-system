@@ -5,7 +5,9 @@ import {
   authenticateUser,
   hashPassword,
   generateToken,
+  verifyToken,
 } from "../middleware/auth.js";
+import bcrypt from "bcryptjs/dist/bcrypt.js";
 
 /* Repository Instances */
 const clientRepo = new ClientRepository();
@@ -22,7 +24,7 @@ export const authController = {
     try {
       const { userType } = req.params;
       const userData = req.body;
-
+      console.log(userData);
       const { isValid, errors } = validateUser(userData);
       if (!isValid) {
         return res
@@ -58,7 +60,7 @@ export const authController = {
       }
 
       // Generate JWT token for the newly created user
-      const token = generateToken(result, userType);
+      const token = generateToken(userData, userType);
 
       res.status(201).json({
         message: `User of type ${userType} registered successfully!`,
@@ -74,19 +76,51 @@ export const authController = {
   async login(req, res) {
     try {
       const { userType } = req.params;
-      const credentials = req.body;
 
-      //authenticateUser(req, res, () => {});
+      let result;
 
-      const result = await authenticateUser(req, res);
+      if (req.headers.authorization) {
+        // Authenticate user using middleware
+        result = await verifyToken(req.headers.authorization);
 
-      if (result.success) {
-        res.status(200).json({
-          message: `User of type ${userType} logged in successfully!`,
+        return res.status(200).json({
+          message: "Login successful",
           data: result,
         });
       } else {
-        res.status(401).json({ error: "Invalid credentials" });
+        const users = await clientRepo.findUserByEmail(
+          req.body.email,
+          userType
+        );
+        const foundUser = users?.[0] ?? null;
+
+        if (!foundUser) {
+          return res.status(404).json({ error: "User not found" });
+        }
+
+        const passwordMatch = await bcrypt.compare(
+          req.body.password,
+          foundUser.password
+        );
+
+        if (!passwordMatch) {
+          return res.status(401).json({ error: "Invalid credentials" });
+        }
+
+        // Generate token with the user data from database
+        const token = generateToken(foundUser, userType);
+
+        // Send successful response with token
+        return res.status(200).json({
+          message: "Login successful",
+          data: {
+            userId: foundUser[`${userType.toLowerCase()}_id`],
+            email: foundUser.email,
+            first_name: foundUser.first_name,
+            last_name: foundUser.last_name,
+          },
+          token: token,
+        });
       }
     } catch (error) {
       console.error("Login error:", error);
