@@ -3,6 +3,12 @@ import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 import { FaCog } from "react-icons/fa"; // You'll need to install react-icons: npm install react-icons
 import { jwtDecode } from "jwt-decode";
+
+// API configuration using Vite environment variables
+const API_CONFIG = {
+  baseUrl: import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api",
+};
+
 const Dashboard = () => {
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
@@ -24,7 +30,7 @@ const Dashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const fetchItems = async (filterParams = {}) => {
+  const fetchItems = async (filterParams = filters) => {
     try {
       setLoading(true);
       const token = localStorage.getItem("authToken");
@@ -35,14 +41,19 @@ const Dashboard = () => {
         return;
       }
 
-      const response = await fetch("/api/items/search", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(filterParams),
-      });
+      const queryParams = new URLSearchParams(filterParams);
+
+      const response = await fetch(
+        `${API_CONFIG.baseUrl}/items/search?${queryParams.toString()}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log(response);
 
       if (!response.ok) {
         if (response.status === 401) {
@@ -140,20 +151,71 @@ const Dashboard = () => {
 
         <div className="items-section">
           {loading ? (
-            <div className="loading">Loading items...</div>
+            <div className="loading">
+              <div className="login-loader"></div>
+              <p>Loading items...</p>
+            </div>
           ) : error ? (
             <div className="error-message">{error}</div>
           ) : (
             <div className="items-grid">
               {items.map((item) => (
                 <div key={item.id} className="item-card">
-                  <h3>{item.title}</h3>
-                  <p>Genre: {item.genre}</p>
-                  <p>Creator: {item.creator}</p>
-                  <p>Status: {item.available ? "Available" : "Checked Out"}</p>
-                  {item.available && (
-                    <button className="checkout-btn">Checkout</button>
-                  )}
+                  <div className="item-main-content">
+                    <div className="item-header">
+                      <h3>{item.title}</h3>
+                      <span
+                        className={`status-badge ${item.status ? "available" : "checked-out"}`}
+                      >
+                        {item.status ? "Available" : "Checked Out"}
+                      </span>
+                    </div>
+                    <div className="item-primary-details">
+                      <p>
+                        <strong>Genre:</strong> {item.genre}
+                      </p>
+                      <p>
+                        <strong>Creator:</strong> {item.creator}
+                      </p>
+                    </div>
+                    <div className="item-actions">
+                      {item.status && (
+                        <button className="checkout-btn">Checkout</button>
+                      )}
+                      <button className="details-btn">View Details</button>
+                    </div>
+                  </div>
+                  <div className="item-details-drawer">
+                    <h4>Additional Details</h4>
+                    <div className="details-grid">
+                      <p>
+                        <strong>ISBN:</strong> {item.isbn || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Publisher:</strong> {item.publisher || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Publication Year:</strong>{" "}
+                        {item.publication_year || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Language:</strong> {item.language || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Pages:</strong> {item.pages || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Format:</strong> {item.format || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Location:</strong> {item.location || "N/A"}
+                      </p>
+                      <p>
+                        <strong>Added On:</strong>{" "}
+                        {new Date(item.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>

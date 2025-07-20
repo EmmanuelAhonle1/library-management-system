@@ -1,4 +1,4 @@
-import Repository from "./Repository";
+import Repository from "./Repository.js";
 
 class ItemRepository extends Repository {
   constructor() {
@@ -13,23 +13,15 @@ class ItemRepository extends Repository {
     try {
       await this.db.initConnection();
 
-      let query = `SELECT * FROM items WHERE 1=1`;
+      let query = `SELECT * FROM library_items WHERE 1=1`;
 
       let params = [];
 
-      if (filters.title && filters.title.trim() != "") {
-        query += ` AND title LIKE ?`;
-        params.push(`%${filters.title.trim()}%`);
-      }
-
-      if (filters.genre && filters.genre.trim() != "") {
-        query += ` AND genre LIKE ?`;
-        params.push(`%${filters.genre.trim()}%`);
-      }
-
-      if (filters.creator && filters.creator.trim() != "") {
-        query += ` AND creator LIKE ?`;
-        params.push(`%${filters.creator.trim()}%`);
+      for (const [key, value] of Object.entries(filters)) {
+        if (value && value.trim() !== "") {
+          query += ` AND ${key} LIKE ?`;
+          params.push(`%${value.trim()}%`);
+        }
       }
 
       const results = await this.db.executeQuery(query, params);

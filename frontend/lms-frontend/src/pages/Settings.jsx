@@ -1,11 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Settings.css";
-
+import { jwtDecode } from "jwt-decode";
 const Settings = () => {
   const navigate = useNavigate();
-  const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-
+  // Get user data from localStorage
+  const token = localStorage.getItem("authToken");
+  const userData = jwtDecode(token);
+  console.log(userData);
   const handleBack = () => {
     navigate(-1); // Go back to previous page
   };
