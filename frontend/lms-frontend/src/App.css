@@ -2,6 +2,16 @@
   min-height: 100vh;
 }
 
+.app-title {
+  text-align: center;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  margin: 0;
+  border-bottom: 1px solid #e9ecef;
+  font-size: 1.5rem;
+  color: #2d3748;
+}
+
 * {
   box-sizing: border-box;
 }

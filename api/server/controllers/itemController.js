@@ -10,7 +10,6 @@ export const itemController = {
 
       // Search items using repository
       const result = await itemRepo.findItemsByFilters(filters);
-      console.log(result);
       if (!result.success) {
         return res.status(500).json({
           error: "Failed to search items",

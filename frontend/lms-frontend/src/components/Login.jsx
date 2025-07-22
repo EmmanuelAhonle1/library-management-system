@@ -49,7 +49,7 @@ const Login = ({ userType }) => {
               localStorage.setItem("userType", userType.toLowerCase());
               localStorage.setItem("userId", data.data.userId);
             }
-            navigate("/dashboard");
+            navigate("/item-search");
           } else {
             // If token is invalid, clear localStorage
             localStorage.removeItem("authToken");
@@ -168,7 +168,7 @@ const Login = ({ userType }) => {
         }
 
         setTimeout(() => {
-          navigate("/dashboard");
+          navigate("/item-search");
         }, 1000);
       })
       .catch((error) => {

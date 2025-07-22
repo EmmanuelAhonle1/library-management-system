@@ -131,7 +131,7 @@ const Signup = ({ userType }) => {
         setSignUpSuccess(true);
         setErrors({}); // Clear any previous errors
         setTimeout(() => {
-          navigate(`/dashboard`);
+          navigate(`/item-search`);
         }, 2000); // Simulate a delay before redirecting
       })
       .catch((error) => {
